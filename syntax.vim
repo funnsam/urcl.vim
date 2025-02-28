@@ -2,33 +2,43 @@ if exists("b:current_syntax")
     finish
 endif
 
-syn match label "\v\.[_a-zA-Z0-9]+"
-syn match ident "\v[_a-zA-Z0-9]+"
+syn match UrclLabel /\v\c\.[_a-z0-9]+/
+syn match UrclLabel /\v\c\~[\+\-]?(0x\x+|0b[0-1]+|0o[0-7]+|\d+)/
+syn match UrclLdSym /\v\c![_a-z0-9]+/
+syn match UrclIdent /\v\c[_a-z0-9]+/
 
-syn match comment "\v//.*$"
-syn region comment start="/\*" end="\*/"
+syn match UrclComment "\v//.*$"
+syn region UrclComment start="/\*" end="\*/"
 
-syn match mac "\v\@[_a-zA-Z0-9]+"
-syn keyword mac minreg minheap bits run minstack
-syn match register "\v\c((r|\$)\d+|pc|sp)"
-syn match heap "\v\c(m|\#)\d+"
-syn match port "\v\%[_a-zA-Z0-9]+"
+syn match UrclMacro /\v\c\@[_a-z0-9]+/
+syn keyword UrclHeader minreg minheap bits run minstack
+syn match UrclRegister /\v\c((r|\$)\d+|pc|sp)/
+syn match UrclHeap /\v\c(m|\#)\d+/
+syn match UrclPort /\v\%[_a-zA-Z0-9]+/
 
-syn match integer "\v(\\+|\\-)?(0[xX][A-Fa-f0-9]+|0[bB][0-1]+|0[oO][0-7]+|[0-9]+)"
-syn region string start="\"" end="\v(\"|\n)"
-syn region char start="\'" end="\v(\'|\n)"
+syn match UrclImm /\v\c[\+\-]?(0x\x+|0b[0-1]+|0o[0-7]+|\d+)/
+syn match UrclImm /\v\d+\.\d*/
+syn match UrclImm /\v\d*\.\d+/
 
-syn match instrs "\v\c(add|rsh|lod|str|bge|nor|sub|jmp|mov|nop|imm|lsh|inc|dec|neg|and|or|not|xnor|xor|nand|brl|brg|bre|bne|bod|bev|ble|brz|bnz|brn|brp|psh|pop|cal|ret|hlt|cpy|brc|bnc|mlt|div|mod|bsr|bsl|srs|bss|out|in|dw|sete|setne|setg|setl|setge|setle|setc|setnc|llod|lstr|sdiv|sbrl|sbrg|sble|ssetl|ssetg|ssetle|ssetge|umlt|sumlt)"
+syn match UrclEscape /\v\\(u\x{4}|x\x{2}|.)/
+syn region UrclStr start=/"/ end=/"/ end=/$/ skip=/\v\\./ contains=UrclEscape
+syn region UrclChr start=/'/ end=/'/ end=/$/ skip=/\v\\./ contains=UrclEscape
 
-hi def link comment Comment
-hi def link mac Define
-hi def link register Type
-hi def link heap Type
-hi def link label Constant
-hi def link port Constant
-hi def link integer Number
-hi def link instrs Identifier
-hi def link string String
-hi def link char Character
+syn match UrclInst /\v\c^\s*[a-z]+/
+
+hi def link UrclChr Character
+hi def link UrclComment Comment
+hi def link UrclEscape @string.escape
+hi def link UrclHeader Keyword
+hi def link UrclHeap Type
+hi def link UrclIdent Normal
+hi def link UrclImm Number
+hi def link UrclInst Keyword
+hi def link UrclLabel Label
+hi def link UrclLdSym Function
+hi def link UrclMacro Define
+hi def link UrclPort Constant
+hi def link UrclRegister Identifier
+hi def link UrclStr String
 
 let b:current_syntax = "urcl"

@@ -1,0 +1,20 @@
+bits 32
+run rom
+
+@define start .start
+
+/* this is a multi-line comment
+ * a
+ * b
+ * c
+ */
+
+!urcl_ld
+.start
+    fadd r1 .5 3. // the float add instruction
+    add r2 +0x3aF ~+1
+    lod r3 m0
+    sub r2 r2 r3
+    out %numb r2
+
+dw ["asd\"f\xA0" 3]
